@@ -1,4 +1,4 @@
-# MdBook with auto index and SUMMARY gen
+# MdBook with auto index and SUMMARY
 
 ## Instalation
 
@@ -9,7 +9,9 @@ Install MdBook `cargo install mdbook`
 ## Setup
 
 `cd /var/www/website` \
-create `summary_builder.py`
+<details>
+    <summary>create `summary_builder.py`</summary>
+
 ```python
 #!/usr/bin/env python3
 
@@ -74,12 +76,14 @@ def __main__():
 if __name__ == '__main__':
     __main__()
 ```
+</details>
 
 create `notify.sh`
 ```bash
 #!/bin/bash
 
 P=/var/www/website/
+MDBOOK_DIR=/home/pi/.cargo/bin/mdbook
 
 inotifywait \
     --event create --event delete \
@@ -91,14 +95,54 @@ inotifywait \
     ${P}src/ |
 while read CHANGED;
 do
-	echo "$CHANGED"
-	python3 ${P}summary_builder.py
-	mdbook build ${P}
+        echo "$CHANGED"
+        python3 ${P}summary_builder.py
+        ${MDBOOK_DIR} build ${P}
 done
+
 ```
 run `mdbook init`
 
+edit `book.toml`
+```config
+[book]
+authors = ["Philip Dell"]
+title = "Documentation Website"
+language = "en"
+multilingual = false
+src = "src"
+
+[output.html.fold]
+enable = true
+
+[output.html]
+git-repository-url = "https://github.com/pilip-d"
+
+```
+
 instead of `mdbook watch` run ./notify.sh
+
+### Deamonize
+
+create `/lib/systemd/system/mdbook-auto-build.service`
+```config
+[Unit]
+Description = Change listener to build Documentation Website(mdBook)
+
+[Service]
+User=pi
+Group=pi
+ExecStart=/var/www/website/notify.sh
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+run \
+`sudo chmod +x /lib/systemd/system/mdbook-auto-build.service` \
+`sudo systemctl daemon-reload` \
+`sudo systemctl enable mdbook-auto-build` \
+`sudo systemctl start mdbook-auto-build`
 
 ## Usage
 
