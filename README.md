@@ -9,8 +9,7 @@ Install MdBook `cargo install mdbook`
 ## Setup
 
 `cd /var/www/website` \
-<details>
-    <summary>create `summary_builder.py`</summary>
+create `summary_builder.py`
 
 ```python
 #!/usr/bin/env python3
@@ -21,27 +20,24 @@ from datetime import datetime
 #config
 ROOT_DIR="/".join(os.path.realpath(__file__).split("/")[:-1])+"/src/"
 print(ROOT_DIR)
-''' saves/creates File
-    :param  path    - full or relative path as string
-    :param  str     - string to be saved in file'''
+
 def save_file(path, str):
     with open(path, "w+") as f:
         f.write(str)
 
-''' removes list elements from list when they contain certain strings
-    :param  file_list   - list of string/files
-    :return file_list   - without index.md and SUMMARY.md string'''
 def remove_index_and_summary(file_list):
+    # removes index.md and SUMMARY.md from file_list
     regex = re.compile(r'.*index.md$|.*SUMMARY.md$')
     return [i for i in file_list if not regex.match(i)]
 
-''' recursively get markdown from directory tree
+def create_md(depth, directory, filename = "index.md", index_files = True):
+    ''' recursively get markdown from directory tree
     param:  depth       - directory depth for indentation 
     param:  directory   - dir to folder wich is beeing processed
-    param:  filename    - either SUMMARY.md or index.me
+    param:  filename    - either SUMMARY.md or index.md
     param:  index_files - TRUE: index.md files are created, FALSE: they are not created
-    return: md          - markdown of folders and ther files'''
-def create_md(depth, directory, filename = "index.md", index_files = True):
+    return: md          - markdown of folders and their files'''
+
     #create currently highest level links
     if filename == "SUMMARY.md":
         md = "* [Main Page](./SUMMARY.md)\n"
@@ -57,7 +53,7 @@ def create_md(depth, directory, filename = "index.md", index_files = True):
             md += depth*"\t" + dir_md+"\n"#add indentation
             #### index.md ####
             dir_md = dir_md.replace(directory.replace(ROOT_DIR,"")+dir+"/","")
-            # remove to-deep indentation (from SUMMARY.d indentation levels)
+            # remove too-deep indentation (from SUMMARY.d indentation levels)
             row_list = []
             for row in [row for row in dir_md.split("\n") ]:
                 row_list.append(row.replace((depth+1)*"\t","\t",1))
@@ -76,7 +72,6 @@ def __main__():
 if __name__ == '__main__':
     __main__()
 ```
-</details>
 
 create `notify.sh`
 ```bash
