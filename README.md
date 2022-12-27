@@ -9,7 +9,7 @@ Install MdBook `cargo install mdbook`
 ## Setup
 
 Clone this repo  
-`git lone https://github.com/pIlIp-d/mdbook-auto-SUMMARY`
+`git clone https://github.com/pIlIp-d/mdbook-auto-SUMMARY`
 
 run `mdbook init`
 
