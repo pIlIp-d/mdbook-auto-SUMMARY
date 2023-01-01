@@ -4,6 +4,7 @@ title = "Documentation Website"
 language = "en"
 multilingual = false
 src = "src"
+theme = "Coal"
 
 [output.html.fold]
 enable = true
