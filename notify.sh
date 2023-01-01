@@ -1,7 +1,15 @@
-#!/bin/bash
+#!/bin/sh
 
-P=/var/www/website/
-MDBOOK_DIR=/home/pi/.cargo/bin/mdbook
+P=${MDBOOK_DIR}/
+
+builder() {
+    echo "Building book index..."
+    python "${P}"summary_builder.py
+    mdbook build $P
+}
+
+# build at start of container
+builder
 
 inotifywait \
     --event create --event delete \
@@ -11,9 +19,7 @@ inotifywait \
     --exclude '.*(.*index.md|.*SUMMARY.md)' \
     --recursive \
     ${P}src/ |
-while read CHANGED;
+while read _;
 do
-        echo "$CHANGED"
-        python3 ${P}summary_builder.py
-        ${MDBOOK_DIR} build ${P}
+  builder
 done
