@@ -12,8 +12,8 @@ def save_file(path, str):
         f.write(str)
 
 def remove_index_and_summary(file_list):
-    # removes index.md and SUMMARY.md from file_list
-    regex = re.compile(r'.*index.md$|.*SUMMARY.md$')
+    # removes dot(.) folders, index.md and SUMMARY.md from file_list
+    regex = re.compile(r'^\..*$|.*index.md$|.*SUMMARY.md$')
     return [i for i in file_list if not regex.match(i)]
 
 def create_md(depth, directory, filename = "index.md", index_files = True):
@@ -22,9 +22,10 @@ def create_md(depth, directory, filename = "index.md", index_files = True):
     param:  directory   - dir to folder wich is beeing processed
     param:  filename    - either SUMMARY.md or index.md
     param:  index_files - TRUE: index.md files are created, FALSE: they are not created
-    return: md          - markdown of folders and their files'''
-
-    #create currently highest level links
+    return: md          - markdown of folders and their files
+    '''
+    md = ""
+    #create the current highest level links
     if filename == "SUMMARY.md":
         md = "* [Main Page](./SUMMARY.md)\n"
     elif filename == "index.md":
