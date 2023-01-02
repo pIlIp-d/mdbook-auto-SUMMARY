@@ -1,11 +1,11 @@
 #!/bin/sh
 
-P=${MDBOOK_DIR}/
+P=${PWD}/
 
 builder() {
     echo "Building book index..."
     python "${P}"summary_builder.py
-    mdbook build $P
+    mdbook build "$P"
 }
 
 # build at start of container
