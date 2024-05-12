@@ -1,4 +1,5 @@
 # MdBook with auto index and SUMMARY
+Automatically create a Summary and TOC for your [mdBook](https://github.com/rust-lang/mdBook).
 
 ![Demo](demo.jpeg)
 
