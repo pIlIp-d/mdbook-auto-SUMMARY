@@ -1,5 +1,7 @@
 # MdBook with auto index and SUMMARY
 
+![Demo](demo.jpeg)
+
 ## Instalation
 
 Install Rust `curl -sSf https://sh.rustup.rs | sh` \
